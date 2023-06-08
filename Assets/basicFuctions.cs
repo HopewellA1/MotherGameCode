@@ -33,11 +33,13 @@ public class basicFuctions : MonoBehaviour
     public void btnRestartLevel()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1);
     }
     public void btnNewGame()
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex-1)
+        PlayerPrefs.SetInt("LevelOneScore", 0);
+        PlayerPrefs.SetInt("LevelTowScore", 0);
         SceneManager.LoadScene(0);
     }
 

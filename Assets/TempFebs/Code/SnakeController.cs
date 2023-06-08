@@ -18,7 +18,7 @@ public class SnakeController : MonoBehaviour {
     public GameObject floorObject;
     public int numApples = 0;
     private Renderer floorRenderer;
-    private ControlDanger ControlDanger;
+    public ControlDanger ControlDanger;
     public GameManager1 gameManager;
     public SpikeEat spikeEat;
     public Text deciderText;
@@ -53,7 +53,7 @@ public class SnakeController : MonoBehaviour {
 
 
         Level = SceneManager.GetActiveScene().buildIndex;
-
+        CreateAppleObject();
 
         floorRenderer = floorObject.GetComponent<Renderer>();
         
@@ -109,16 +109,7 @@ public class SnakeController : MonoBehaviour {
 
             index++;
         }
-        int sphereCount = CountSpheresOnFloor();
-        if (sphereCount < 1)
-        {
-            for (int i = 0; i < 1; i++) 
-            {
-                CreateAppleObject();
-                Debug.Log("Apple in update!");
-            }
-            
-        }
+    
         ScoreText.text = "Score: " +numApples.ToString();
     }
 
@@ -134,40 +125,27 @@ public class SnakeController : MonoBehaviour {
     //        // Add your desired code to handle the collision here, such as increasing score or destroying the apple object
     //    }
     //}
+
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Object currently in collision: " + other.gameObject.name);
+        
         if (other.gameObject.name == "Sphere")
         {
-            // Collision detected with the "apple" game object
-            Destroy(other.gameObject);
-
-            //if (!hasApple) { } 
-            int sphereCount = CountSpheresOnFloor();
-           
-                
-                
-            
-            Debug.Log(sphereCount);
-            //if (sphereCount < 2) 
-            // {
-            //     CreateAppleObject();
-            //     
-            // }
-
-
-            // GrowSnake();
-
+      
             numApples += 1;
-            if(Level == 3)
+            if (Level == 3)
             {
                 PlayerPrefs.SetInt("LevelTowScore", numApples);
                 PlayerPrefs.Save();
             }
-            
-            //  Debug.Log(numApples + " is the number apples.");
 
-            // Add your desired code to handle the collision here, such as increasing score or destroying the apple object
+            other.gameObject.name = "NoCount";
+           
+            Destroy(other.gameObject);
+
+            GrowSnake();
+            CreateAppleObject();
+
         }
         //if (other.gameObject.name == "body")
         //{
@@ -196,8 +174,7 @@ public class SnakeController : MonoBehaviour {
         GameObject body = Instantiate(BodyPrefab);
         body.name= "body";
         BodyParts.Add(body);
-        ControlDanger.DanderGrowSnake();
-        ControlDanger.DanderGrowSnake();
+ 
         Debug.Log("Done!");
     }
     private void GrowSnake2()
@@ -233,21 +210,21 @@ public class SnakeController : MonoBehaviour {
         spikeEat.CreateSpikeObject();
         spikeEat.CreateSpikeObject();
     }
-    private int CountSpheresOnFloor()
-    {
-        int sphereCount = 0;
-        Collider[] colliders = Physics.OverlapBox(floorObject.transform.position, floorObject.transform.localScale / 2f);
+    //private int CountSpheresOnFloor()
+    //{
+    //    int sphereCount = 0;
+    //    Collider[] colliders = Physics.OverlapBox(floorObject.transform.position, floorObject.transform.localScale / 2f);
 
-        foreach (Collider collider in colliders)
-        {
-            if (collider.gameObject.name == "Sphere")
-            {
-                sphereCount++;
-            }
-        }
+    //    foreach (Collider collider in colliders)
+    //    {
+    //        if (collider.gameObject.name == "Sphere")
+    //        {
+    //            sphereCount++;
+    //        }
+    //    }
 
-        return sphereCount;
-    }
+    //    return sphereCount;
+    //}
     
     private void preventSnakeOutBound()
     {
